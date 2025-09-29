@@ -29,7 +29,7 @@
 
 ---
 
-## ⚙️ Technologies utilisées
+## Technologies utilisées
 
 * **Python** : langage de programmation imposé pour le projet.
 * **Pyramid** : framework web côté serveur utilisé pour développer l’application.
