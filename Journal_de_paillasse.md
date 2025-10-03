@@ -17,4 +17,11 @@
 
 ---
 
-### ... ###
+### 29/09/25 ###
+---
+
+1. Rédaction de l'analyse du cahier des charges et du glossaire techiques du projet.
+
+2. Réflexion sur les erreurs d'importation de tesseract et de l'utilisation de pytesseract dans l'analyse de charactères.
+
+3. Début d'écriture du README pour les scénarios.
