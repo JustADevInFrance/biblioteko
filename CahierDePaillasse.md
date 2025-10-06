@@ -9,3 +9,33 @@ Dans cette séance, j'ai pu générer un Markdown à partir d'une page de livre 
 J'ai également pu écrire le scénario pour devenir membre. Pour le scénario d'installation, je suis toujours indécis sur ce que nous allons faire.
 
 Je compte maintenant travailler sur la manière de découper intelligemment un PDF avant de procéder à son analyse.
+
+## Date : Lundi 06 Octobre 2025
+# Avancement sur les scénarios de la bibliothèque numérique
+
+Nous avons pu avancer sur plusieurs scénarios. Les scénarios les plus basiques ont été pris en compte, il reste maintenant à identifier et formaliser les scénarios complémentaires.  
+
+---
+
+## 1. Scénario de stockage des œuvres non retenues après modération
+
+Nous avons proposé un scénario où les livres **non retenus après modération** pourraient être conservés dans un **dossier spécifique non prévu dans le cahier des charges**.  
+L’objectif serait de stocker **les informations sur le livre** ainsi que **sur le membre qui l’a proposé**, sans pour autant les rendre accessibles aux autres utilisateurs.
+
+## 2. Gestion des œuvres sous droits (répertoire `séquestre`)
+
+Nous avons abordé avec le professeur la question de la meilleure manière de gérer les livres sous droits :  
+1. **Proposition non retenue :**  
+   Mettre les livres sous droits sur un **serveur distant**, là où la législation leverait temporairement les droits.  
+   - Rejetée à cause des **risques de fraude et de contournement de la législation**.  
+
+2. **Discussion :**  
+   Définir clairement la **politique de l’application** pour décider quels documents peuvent être conservés ou partagés.
+
+## 3. Gestion des livres empruntés
+Nous avons également discuté de la façon de gérer l’accès aux ouvrages empruntés :  
+1. **Proposition non retenue :**  
+   Offrir un accès **hors ligne** aux fichiers.  
+   - Rejetée en raison de **failles de sécurité potentielles**.  
+2. **Proposition retenue (pour l’instant) :**  
+   Accès à la session en ligne, avec **rafraîchissement toutes les 10 minutes** pour permettre des vérifications et garantir la sécurité.
