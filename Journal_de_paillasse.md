@@ -40,3 +40,13 @@
 4. Réflexion sur le **scénario d'emprunts** quant au stockage de données spécifiques dans un fichier (yml, json) dans le répertoire **emprunts** pour chaque emprunts, ce qui permettrait un script de vérification des oeuvres empruntées (gestion de délai).
 
 5. Réflexion sur le fait de tout ce qui est dans le **séquestre** est empruntable ou pas. Dans notre cas, tout ne peut pas être empruntable, on peut donc placer une métadonnée filtre pour les oeuvres empruntables et les non-empruntables.
+
+---
+
+### 13/10/25 ###
+
+1. Rédaction de quelques scénarios et modification du scénario d'emprunt avec les réflxions vues précédemment.
+
+2. Modification du script d'export en markdown (non fonctionnel pour l'instant).
+
+3. Passage et présentation du glossaire métier et de la liste de scénarios.
