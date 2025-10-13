@@ -1,4 +1,4 @@
-## les informations concernant une œuvre ##
+## Consulter les informations concernant une œuvre ##
 
 **Description :**  
 Le membre ou le bibliothécaire consulte les métadonnées d’une œuvre pour en connaître les détails.  
