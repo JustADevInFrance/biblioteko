@@ -39,3 +39,6 @@ Nous avons également discuté de la façon de gérer l’accès aux ouvrages em
    - Rejetée en raison de **failles de sécurité potentielles**.  
 2. **Proposition retenue (pour l’instant) :**  
    Accès à la session en ligne, avec **rafraîchissement toutes les 10 minutes** pour permettre des vérifications et garantir la sécurité.
+
+## Date : Lundi 13 Octobre 2025
+Aujourd’hui, je me suis concentré sur le fichier export.md. Pour l’instant, j’ai réussi à générer du Markdown en utilisant ChatGPT, ce qui m’a permis de mieux comprendre le fonctionnement et la manière d’appeler les API de Mistral pour l’OCR et la correction de texte. L’objectif est de pouvoir automatiser l’extraction et la mise en forme des textes scannés à partir des fichiers PDF.
