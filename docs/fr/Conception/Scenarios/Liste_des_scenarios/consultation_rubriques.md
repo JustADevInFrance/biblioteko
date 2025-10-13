@@ -14,3 +14,5 @@ Le membre explore les différentes rubriques de la bibliothèque pour accéder a
    - **emprunts** (œuvres empruntées)  
    - **séquestre** (œuvres protégées, non accessibles directement)  
    - **a_moderer** (œuvres proposées, en attente de validation)  
+
+### [Back](../README.md) ###

@@ -25,3 +25,18 @@
 2. Réflexion sur les erreurs d'importation de tesseract et de l'utilisation de pytesseract dans l'analyse de charactères.
 
 3. Début d'écriture du README pour les scénarios.
+
+---
+
+### 06/10/25 ###
+---
+
+1. Rédaction de plusieurs scénarios pour la liste de scénarios.
+
+2. Le rendu de test du script d'export au format markdown n'est pas optimal. Réflexion sur le choix de l'IA à utiliser (Gémini, Pixtral). On se tournera sur Pixtral car plus ciblé sur OCR et structuration de documents.
+
+3. Réflexion sur le **scénario d'emprunts** quant au fait de passer l'oeuvre en lecture en ligne ou hors ligne. Le hors ligne pourrait poser des problèmes de sécurité sur certains systèmes d'exploitation (Linux) à cause du cache. Il est donc préférable de proposer uniquement l'oeuvre en lecture en ligne pour une meilleure sécurité. 
+
+4. Réflexion sur le **scénario d'emprunts** quant au stockage de données spécifiques dans un fichier (yml, json) dans le répertoire **emprunts** pour chaque emprunts, ce qui permettrait un script de vérification des oeuvres empruntées (gestion de délai).
+
+5. Réflexion sur le fait de tout ce qui est dans le **séquestre** est empruntable ou pas. Dans notre cas, tout ne peut pas être empruntable, on peut donc placer une métadonnée filtre pour les oeuvres empruntables et les non-empruntables.

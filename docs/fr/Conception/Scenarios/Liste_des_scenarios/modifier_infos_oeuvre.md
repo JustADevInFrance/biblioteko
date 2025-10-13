@@ -13,3 +13,5 @@ Le bibliothécaire met à jour ou corrige les métadonnées d’une œuvre (pend
 3. Il modifie les champs nécessaires (ex. : auteur, droits, catégorie, etc.).  
 4. Il valide les changements.  
 5. L’index est automatiquement mis à jour.  
+
+### [Back](../README.md) ###

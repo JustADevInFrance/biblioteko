@@ -11,3 +11,5 @@ Le système détecte qu’une œuvre protégée a atteint la fin de sa période 
 2. Lorsqu’une œuvre arrive à expiration, son statut passe à **domaine public**.  
 3. Le système déplace le fichier depuis **séquestre** vers **fond_commun**.  
 4. L’œuvre devient accessible gratuitement. 
+
+### [Back](../README.md) ###

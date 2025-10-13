@@ -10,3 +10,5 @@ L’application met à jour automatiquement l’index général à chaque ajout,
 1. Lorsqu’une œuvre est ajoutée, supprimée ou modifiée, une requête de mise à jour est déclenchée.  
 2. L’application met à jour les métadonnées dans l’index principal.  
 3. Les changements se propagent aux bibliothécaires et aux membres concernés.  
+
+### [Back](../README.md) ###

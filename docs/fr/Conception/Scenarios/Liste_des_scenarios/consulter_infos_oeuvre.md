@@ -12,3 +12,5 @@ Le membre ou le bibliothécaire consulte les métadonnées d’une œuvre pour e
 2. Il sélectionne l’œuvre.  
 3. L’application affiche ses informations (titre, auteur, catégorie, droits, format, etc.).  
 4. Selon les droits, l’utilisateur peut accéder au fichier ou seulement à sa fiche descriptive.  
+
+### [Back](../README.md) ###
