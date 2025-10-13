@@ -17,3 +17,5 @@ Un membre souhaite obtenir le rôle de bibliothécaire afin de participer à la 
     - Le rôle du membre est mis à jour dans la base.
     - Il obtient l'accès à la rubrique **Modération** et aux oeuvres à valider (rubrique `a_moderer`).
 6. En cas de refus, un message indique la raison du rejet.
+
+### [Back](../README.md) ###
