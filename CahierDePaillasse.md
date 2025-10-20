@@ -42,3 +42,29 @@ Nous avons également discuté de la façon de gérer l’accès aux ouvrages em
 
 ## Date : Lundi 13 Octobre 2025
 Aujourd’hui, je me suis concentré sur le fichier export.md. Pour l’instant, j’ai réussi à générer du Markdown en utilisant ChatGPT, ce qui m’a permis de mieux comprendre le fonctionnement et la manière d’appeler les API de Mistral pour l’OCR et la correction de texte. L’objectif est de pouvoir automatiser l’extraction et la mise en forme des textes scannés à partir des fichiers PDF.
+
+## Date : Lundi 20 octobre 2025
+
+### Compte rendu de la séance
+
+Aujourd’hui, nous avons discuté de la manière de **gérer les œuvres sous droits**.  
+Plusieurs propositions ont été examinées, mais certaines ont été **écartées** :
+
+1. **Héberger le serveur dans un pays où l’œuvre est libre de droit**  
+   → Problème : le pays d’origine de l’utilisateur peut détecter et appliquer sa propre législation, ce qui ne résout pas la question de la responsabilité juridique.
+
+2. **Héberger uniquement les utilisateurs (les œuvres stockées sur leurs espaces personnels)**  
+   → Même dans ce cas, la loi pourrait se retourner contre la plateforme hébergeuse qui facilite l’accès à ces œuvres.
+
+
+### Solution retenue
+
+Ne **pas proposer d’ouvrages sous droits** aux utilisateurs.  
+Seules les **œuvres du domaine public** ou celles dont les **droits de diffusion sont clairement établis** seront accessibles sur la plateforme.
+
+
+### Travaux réalisés
+
+- Début du travail sur les **diagrammes UML** avec **Mermaid**.  
+- Discussion sur la structure et la cohérence du **modèle de données**.  
+- Première version des diagrammes de **classes** et **cas d’utilisation** en cours.
