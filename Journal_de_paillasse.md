@@ -50,3 +50,9 @@
 2. Modification du script d'export en markdown (non fonctionnel pour l'instant).
 
 3. Passage et présentation du glossaire métier et de la liste de scénarios.
+
+### 20/10/25 ###
+
+1. Réflexion sur les problèmes de sécurité liés aux oeuvres sous droits d'auteur. Dès qu'une oeuvre sous droits est passée sur le site (ou sur l'application), des données sont stockées et trouvables, même avec la mise en place d'une gestion d'oeuvres empruntables ou non. Ces données posent alors un problème de sécurité au niveau de l'application.
+
+2. Réalisation de quelques diagrammes de classes pour certains scénarios.

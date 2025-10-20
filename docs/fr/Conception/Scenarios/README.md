@@ -4,7 +4,7 @@
 
 - __Scénario pour [devenir membre](./Liste_des_scenarios/devenir_membre.md)__ : Un utilisateur souhaite devenir membre de la bibliothèque numérique afin de pouvoir emprunter, louer et proposer des oeuvres.
 
-- __Scénario pour [se connexter](./Liste_des_scenarios/se_connecter.md)__ : Un utilisateur souhaite se connecter à l'application afin d'accéder à son espace personnel et à ses oeuvres.
+- __Scénario pour [se connecter](./Liste_des_scenarios/se_connecter.md)__ : Un utilisateur souhaite se connecter à l'application afin d'accéder à son espace personnel et à ses oeuvres.
 
 
 - __Scénario pour [devenir bibliothécaire](./Liste_des_scenarios/devenir_bibliothecaire.md)__ : Un membre souhaite obtenir le rôle de bibliothécaire afin de participer à la modération et à la gestion des oeuvres.
