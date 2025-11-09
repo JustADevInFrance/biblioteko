@@ -68,3 +68,41 @@ Seules les **œuvres du domaine public** ou celles dont les **droits de diffusio
 - Début du travail sur les **diagrammes UML** avec **Mermaid**.  
 - Discussion sur la structure et la cohérence du **modèle de données**.  
 - Première version des diagrammes de **classes** et **cas d’utilisation** en cours.
+
+# Rapport des résultats
+
+## Date : Dimanche 09 Novembre 2025
+
+### Résumé
+
+Pour chaque scénario étudié, j'ai pu rédiger son **Diagramme de Classes Participatif (DCP)**.
+
+### Définition du DCP
+
+Le **DCP (Diagramme de Classes du Problème)** est un diagramme UML utilisé lors de l'analyse des cas d'utilisation pour identifier les **classes d’analyse participantes**. Il permet de représenter clairement :
+
+- Les **entités** du domaine métier (données manipulées).  
+- Les **contrôles** (logique et coordination des cas d’utilisation).  
+- Les **dialogues** (interfaces ou interactions avec l’utilisateur).  
+
+Ce type de diagramme met en avant les **classes qui entrent en jeu lors des différents scénarios**, sans surcharger les détails techniques, et fournit une **vision globale du système du point de vue fonctionnel**.
+
+### Observations
+
+- J'ai pu utiliser le DCP pour **identifier les relations entre entités, contrôles et dialogues** pour chaque scénario.  
+- Les modèles se basent sur les scénarios **réels et pertinents**, ce qui les rend directement exploitables pour la conception et l'implémentation.  
+- L’approche permet de **préparer la conception détaillée sans se perdre dans des détails obsolètes ou superflus**.  
+- Ces diagrammes facilitent la **communication avec les développeurs et les parties prenantes**, en donnant une vue claire des responsabilités et interactions de chaque classe.
+
+### Conclusion
+
+L'utilisation des **DCP pour chaque scénario** a permis :
+
+- De structurer l’analyse des cas d’utilisation de manière cohérente.  
+- D’assurer que toutes les entités et interactions importantes sont prises en compte.  
+- De créer une base solide pour la **modélisation détaillée et l’implémentation ultérieure** (par exemple en MVVM ou MVC).  
+
+En résumé, le DCP est un outil efficace pour **passer de l’analyse fonctionnelle à la conception logicielle**, tout en restant fidèle aux besoins exprimés dans les scénarios.
+ 
+
+
