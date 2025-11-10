@@ -68,7 +68,6 @@ Utilisateur <|-- Membre
 Membre <|-- Bibliothecaire
 Membre --> Emprunt
 Emprunt --> Oeuvre
-Bibliothecaire --> Oeuvre
 ```
 
 ## [Back](../README.md)
