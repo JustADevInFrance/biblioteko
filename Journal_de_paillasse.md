@@ -62,3 +62,7 @@
 1. Mise en commun des idées concernant la gestion des oeuvres sous droits d'auteurs et accessoirement sur les emprunts. L'idée donnée la plus praticable serait une modération humaine (vérification humaine) quant au stockage des oeuvres sous droits. L'idée de notre groupe $-$ refuser les oeuvres sous droits et stocker leurs métadonnées dans une blacklist $-$ n'est probablement pas applicable car certaines oeuvres n'ont pas d'informations trouvables permettant de poruver les droits d'auteur.
 
 2. Rédaction de nouveaux diagrammes de classes pour d'autre scénarios.
+
+### 10/11/25
+
+1. Ecriture de plusieurs diagrammes d'états transitions à partir des diagrammes de classes
