@@ -1,3 +1,5 @@
+# Diagramme d'états transitions pour l'Index
+
 ```mermaid
 stateDiagram-v2
     [*] --> Initial

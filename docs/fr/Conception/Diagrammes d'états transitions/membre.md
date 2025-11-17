@@ -1,3 +1,5 @@
+# Diagramme d'états transitions pour le Membre
+
 ```mermaid
 stateDiagram-v2
     [*] --> NonInscrit

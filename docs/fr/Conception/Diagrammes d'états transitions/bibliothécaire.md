@@ -1,3 +1,5 @@
+# Diagramme d'états transitions pour le Bibliothécaire
+
 ```mermaid
 stateDiagram-v2
     [*] --> Candidat
