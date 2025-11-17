@@ -104,5 +104,11 @@ L'utilisation des **DCP pour chaque scénario** a permis :
 
 En résumé, le DCP est un outil efficace pour **passer de l’analyse fonctionnelle à la conception logicielle**, tout en restant fidèle aux besoins exprimés dans les scénarios.
  
+## Date : Dimanche 17 Novembre 2025
 
+Aujourd’hui, j’ai pu mettre en place plusieurs diagrammes de séquence en m’appuyant sur le diagramme de classes UML existant.  
+L’intelligence artificielle m’a aidé à structurer les interactions entre les différents composants (dialogues, contrôleurs, entités, services), ce qui m’a permis d’obtenir des représentations cohérentes et correctement alignées avec les cas d’utilisation identifiés.
 
+Pour le moment, j’ai choisi de laisser de côté certains scénarios jugés secondaires ou répétitifs, ainsi que ceux qui ne constituent que des variantes mineures de scénarios déjà modélisés. Cela me permet de me concentrer en priorité sur les cas les plus significatifs pour l’application et de clarifier la logique générale avant d’approfondir les chemins alternatifs.
+
+Les résultats actuels sont organisés sous forme de code Markdown, facilitant leur intégration dans la documentation et leur évolution future.
