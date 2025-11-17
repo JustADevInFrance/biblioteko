@@ -10,7 +10,7 @@ class DialogueCreationCompte {
   + afficherFormulaireInscription()
   + saisirInformations()
   + afficherValidation()
-  + envoyerConfirmationEmail()
+
 }
 
 %% --- Contrôles ---
@@ -51,12 +51,12 @@ class BaseDonnees {
 }
 
 %% --- Relations (liens fonctionnels) ---
-DialogueCreationCompte --> CtrCreationMembre : "interagit avec"
+DialogueCreationCompte -- CtrCreationMembre : "interagit avec"
 
-CtrCreationMembre --> Utilisateur : "vérifie / enregistre"
-CtrCreationMembre --> Membre : "crée compte"
-CtrCreationMembre --> Email : "envoie confirmation"
-CtrCreationMembre --> BaseDonnees : "sauvegarde / met à jour"
+CtrCreationMembre -- Utilisateur : "vérifie / enregistre"
+CtrCreationMembre -- Membre : "crée compte"
+CtrCreationMembre -- Email : "envoie confirmation"
+CtrCreationMembre -- BaseDonnees : "sauvegarde / met à jour"
 
 %% --- Notes UML ---
 note for CtrCreationMembre "Gère la logique de création et activation du compte membre."
