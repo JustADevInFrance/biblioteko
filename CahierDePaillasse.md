@@ -103,7 +103,7 @@ L'utilisation des **DCP pour chaque scénario** a permis :
 - De créer une base solide pour la **modélisation détaillée et l’implémentation ultérieure** (par exemple en MVVM ou MVC).  
 
 En résumé, le DCP est un outil efficace pour **passer de l’analyse fonctionnelle à la conception logicielle**, tout en restant fidèle aux besoins exprimés dans les scénarios.
- 
+
 ## Date : Dimanche 17 Novembre 2025
 
 Aujourd’hui, j’ai pu mettre en place plusieurs diagrammes de séquence en m’appuyant sur le diagramme de classes UML existant.  
@@ -112,3 +112,11 @@ L’intelligence artificielle m’a aidé à structurer les interactions entre l
 Pour le moment, j’ai choisi de laisser de côté certains scénarios jugés secondaires ou répétitifs, ainsi que ceux qui ne constituent que des variantes mineures de scénarios déjà modélisés. Cela me permet de me concentrer en priorité sur les cas les plus significatifs pour l’application et de clarifier la logique générale avant d’approfondir les chemins alternatifs.
 
 Les résultats actuels sont organisés sous forme de code Markdown, facilitant leur intégration dans la documentation et leur évolution future.
+
+## Date : Lundi 01 Décembre 2025
+
+Aujourd'hui, je travaille sur la maîtrise de **Pyramid** afin d'accéder au dépôt Git et de mieux gérer les comptes ainsi que les accès aux données de l'application.
+
+Pour l'instant, j'ai réussi à créer un module **upload.pt** permettant de téléverser un document dans un dépôt Git.
+
+Je vais maintenant me concentrer sur la mise en place d'un système **no-MySQL** pour gérer les comptes utilisateurs, les bibliothécaires et autres rôles.

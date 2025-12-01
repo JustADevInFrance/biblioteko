@@ -1,0 +1,7 @@
+<html xmlns:tal="http://xml.zope.org/namespaces/tal">
+  <head><title tal:content="title">Modération</title></head>
+  <body>
+    <h1 tal:content="title">Modération</h1>
+    <p>Liste des documents en attente de validation par un bibliothécaire.</p>
+  </body>
+</html>

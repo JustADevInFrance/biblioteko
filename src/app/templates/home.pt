@@ -1,0 +1,6 @@
+<h1>${titre}</h1>
+<p>${message}</p>
+
+<ul>
+    <li tal:repeat="livre livres">${livre}</li>
+</ul>

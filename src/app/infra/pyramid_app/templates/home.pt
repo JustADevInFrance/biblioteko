@@ -1,0 +1,13 @@
+<html xmlns:tal="http://xml.zope.org/namespaces/tal">
+  <head>
+    <title tal:content="title">Titre par défaut</title>
+  </head>
+  <body>
+    <h1 tal:content="title">Titre par défaut</h1>
+    <p tal:content="message">Message par défaut</p>
+    <h3>Fonctionnalités :</h3>
+    <ul>
+      <li tal:repeat="feat features" tal:content="feat">Feature</li>
+    </ul>
+  </body>
+</html>

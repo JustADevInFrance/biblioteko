@@ -1,0 +1,10 @@
+<html xmlns:tal="http://xml.zope.org/namespaces/tal">
+  <head><title tal:content="title">Uploader</title></head>
+  <body>
+    <h1 tal:content="title">Uploader un document</h1>
+    <form method="POST" enctype="multipart/form-data">
+      <input type="file" name="file"/>
+      <button type="submit">Envoyer</button>
+    </form>
+  </body>
+</html>
