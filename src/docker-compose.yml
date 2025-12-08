@@ -1,0 +1,14 @@
+version: "3.9"
+
+services:
+  biblioteko:
+    build: .
+    container_name: biblioteko
+    ports:
+      - "6543:6543"
+    environment:
+      - PYRAMID_REPO_PATH=/app/git_data
+    volumes:
+      - ./git_data:/app/git_data   # dossier local monté dans le conteneur
+    restart: unless-stopped
+

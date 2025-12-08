@@ -10,7 +10,7 @@ def create_app():
     routes.include_routes(config)
 
     # Scanner les vues décorées
-    config.scan('.views')
+    config.scan('infra.pyramid_app.views')
 
     # Support TAL/METAL
     config.include('pyramid_chameleon')

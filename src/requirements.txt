@@ -1,0 +1,8 @@
+pyramid==2.0.2
+pyramid_chameleon
+zope.interface
+zope.component
+zope.deprecation
+GitPython
+waitress
+
