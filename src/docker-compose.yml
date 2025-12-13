@@ -8,7 +8,10 @@ services:
       - "6543:6543"
     environment:
       - PYRAMID_REPO_PATH=/app/git_data
+      - MISTRAL_API_KEY=${MISTRAL_API_KEY}
     volumes:
-      - ./git_data:/app/git_data   # dossier local monté dans le conteneur
+      - ./git_data:/app/git_data        # dépôt Git
+      - ./uploads:/app/uploads          # fichiers uploadés
+      - ./md:/app/md                    # fichiers Markdown générés
     restart: unless-stopped
 

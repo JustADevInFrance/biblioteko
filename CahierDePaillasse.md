@@ -120,3 +120,71 @@ Aujourd'hui, je travaille sur la maîtrise de **Pyramid** afin d'accéder au dé
 Pour l'instant, j'ai réussi à créer un module **upload.pt** permettant de téléverser un document dans un dépôt Git.
 
 Je vais maintenant me concentrer sur la mise en place d'un système **no-MySQL** pour gérer les comptes utilisateurs, les bibliothécaires et autres rôles.
+
+## Date : Samedi 13 Décembre 2025
+
+Après une longue discussion avec mon collègue, nous avons décidé de gérer les utilisateurs à l’aide d’une base de données MySQL, tandis que les œuvres numériques seront gérées via des dépôts Git.
+
+---
+
+## Technologies et justification des choix
+
+### 1. Git  
+Git est une technologie de gestion de versions distribuée. Elle est utilisée pour assurer la gestion, la traçabilité et l’historique des œuvres déposées dans la bibliothèque numérique.
+
+Deux branches principales ont été mises en place :
+
+#### 1.1 master  
+La branche **master** gère les œuvres validées, notamment celles présentes dans le répertoire `fond_commun`, ainsi que les œuvres sous droits placées dans le `séquestre`.
+
+#### 1.2 moderation  
+La branche **moderation** est dédiée aux œuvres en attente de validation. Les fichiers sont stockés dans le répertoire `a_moderer` et exposés via une interface web accessible uniquement aux bibliothécaires.
+
+L’utilisation de Git permet :
+- Une traçabilité complète des dépôts, validations et suppressions d’œuvres.
+- Un historique fiable des actions effectuées sur chaque fichier, utile en cas de litige lié aux droits d’auteur.
+- Une séparation claire des états d’une œuvre (proposée, validée, séquestrée).
+- La synchronisation et la diffusion des œuvres via des dépôts distants, favorisant une bibliothèque décentralisée.
+
+---
+
+### 2. Docker  
+Docker est une technologie largement utilisée dans les environnements cloud et DevOps pour le déploiement et les tests applicatifs.
+
+Son utilisation dans ce projet permet :
+- D’isoler l’application et ses dépendances (Python, Git, bibliothèques).
+- D’éviter les problèmes d’installation liés au système hôte.
+- De garantir un comportement identique de l’application sur différents systèmes d’exploitation.
+- De simplifier le lancement de l’application à l’aide d’une seule commande, même pour un utilisateur non technique.
+
+---
+
+### 3. Pyramid  
+Le framework web **Pyramid** a été choisi pour sa flexibilité et son intégration naturelle avec Python.
+
+Il présente plusieurs avantages :
+- Une architecture modulaire adaptée aux projets de taille moyenne à grande.
+- Une bonne compatibilité avec les scripts Python existants (OCR, traitement PDF, conversion Markdown).
+- Une gestion claire des routes, des vues et des permissions, essentielle pour distinguer les rôles utilisateurs et bibliothécaires.
+- Une approche explicite favorisant la compréhension et la maintenance du code.
+
+---
+
+### 4. TAL / METAL  
+**TAL/METAL** est utilisé en complément de Pyramid pour la gestion des templates HTML.
+
+Ce choix permet :
+- Une séparation claire entre la logique métier et la présentation.
+- Un rendu dynamique des pages (upload, modération, consultation des œuvres).
+- Une intégration native et performante avec Pyramid, sans dépendances lourdes.
+
+---
+
+### 5. Mermaid  
+**Mermaid** est utilisé pour intégrer des diagrammes directement dans les documents Markdown.
+
+Il permet :
+- La génération de diagrammes lisibles et maintenables (architecture, flux applicatifs, branches Git).
+- Une documentation cohérente et versionnée avec le reste du projet.
+- Une meilleure compréhension globale du système sans dépendre d’outils externes.
+

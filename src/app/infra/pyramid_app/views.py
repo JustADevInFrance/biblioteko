@@ -3,6 +3,7 @@ import os
 from pyramid.view import view_config
 from pyramid.response import Response
 from domain.services.git_services import GitService
+from domain.services.pdf_to_md import pdf_to_markdown
 
 import mimetypes
 
@@ -26,23 +27,40 @@ def home(request):
     }
 
 
-# -----------------------------
-# UPLOAD UTILISATEUR
-# -----------------------------
 @view_config(route_name="upload", renderer="templates/upload.pt")
 def upload(request):
     message = "Choisissez un fichier à envoyer"
 
     if request.method == "POST":
-        uploaded_file = request.POST.get("file")
+        uploaded_file = request.POST['file']  # <- ne pas utiliser get()
         if uploaded_file is None:
             message = "Aucun fichier reçu."
         else:
-            filename = uploaded_file.filename
-            file_bytes = uploaded_file.file.read()
-            # Ajout dans Git → a_moderer/
-            git_service.add_file_for_moderation(filename, file_bytes)
-            message = f"Fichier {filename} ajouté pour modération."
+            # Vérification du type
+            if hasattr(uploaded_file, 'filename'):
+                filename = uploaded_file.filename
+                file_bytes = uploaded_file.file.read()  # contenu binaire
+
+                # Traiter le fichier (PDF → Markdown ou MD direct)
+                ext = os.path.splitext(filename)[1].lower()
+                if ext == ".md":
+                    git_service.add_file_for_moderation(filename, file_bytes)
+                    message = f"Fichier {filename} ajouté pour modération."
+                elif ext == ".pdf":
+                    tmp_pdf_path = os.path.join("/tmp", filename)
+                    with open(tmp_pdf_path, "wb") as f:
+                        f.write(file_bytes)
+
+                    md_path = pdf_to_markdown(tmp_pdf_path, nombre_de_page=10)
+                    with open(md_path, "rb") as f:
+                        md_bytes = f.read()
+                    git_service.add_file_for_moderation(os.path.basename(md_path), md_bytes)
+                    os.remove(tmp_pdf_path)
+                    message = f"{filename} converti en Markdown et ajouté pour modération."
+                else:
+                    message = "Format de fichier non supporté."
+            else:
+                message = "Fichier mal reçu."
 
     return {"title": "Uploader", "message": message}
 
@@ -100,6 +118,12 @@ def moderation_approve(request):
     filename = request.matchdict["filename"]
     git_service.approve_file(filename)
     return Response(f"{filename} approuvé et déplacé dans fond_commun.")
+
+
+    # -----------------------------
+    # AUTRE FORMAT → REFUS
+    # -----------------------------
+    return Response("Format de fichier non supporté", status=400)
 
 
 # -----------------------------

@@ -4,15 +4,10 @@ import subprocess
 from typing import List
 
 
+
+
+
 class GitService:
-    """
-    Service Git spécialisé pour Biblioteko.
-    Gère :
-    - dépôt Git
-    - branches (master, moderation)
-    - répertoires : fond_commun, a_moderer, sequestre
-    - modération (approve/reject)
-    """
 
     DEFAULT_DIRECTORIES = ["fond_commun", "a_moderer", "sequestre"]
     DEFAULT_BRANCHES = ["moderation"]
@@ -20,7 +15,7 @@ class GitService:
     def __init__(self, repo_path: str):
         self.repo_path = repo_path
         os.makedirs(repo_path, exist_ok=True)
-
+        
         # Init du repo si nécessaire
         if not os.path.exists(os.path.join(repo_path, ".git")):
             subprocess.run(["git", "-C", repo_path, "init"], check=True)

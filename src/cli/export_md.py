@@ -1,61 +1,111 @@
+import fitz  # PyMuPDF
 import base64
-from mistralai import Mistral
 import os
+from mistralai import Mistral
+from tempfile import TemporaryDirectory
 
-# --- CONFIGURATION ---
-api_key = "0gGtjfCDKLiiaZzMdNzTx9PFiB7Q0P8D"  # ta clé API
-pdf_path = "extrait_p5_p6.pdf"
-output_md = "output_corrected.md"
+# ---------------- CONFIG ----------------
+API_KEY = os.getenv("a5s3EYGxxYPicvNfjbtntglitfSIelX7")  
+INPUT_PDF = "input.pdf"
+OUTPUT_MD = "output_final.md"
+PAGES_PER_CHUNK = 5
 
-# --- INITIALISATION CLIENT ---
-client = Mistral(api_key=api_key)
+# ---------------- CLIENT ----------------
+client = Mistral(api_key=API_KEY)
 
-# --- LECTURE ET ENCODAGE PDF EN BASE64 ---
-with open(pdf_path, "rb") as f:
-    pdf_base64 = base64.b64encode(f.read()).decode("utf-8")
+# ---------------- UTILITAIRES ----------------
 
-document_url = f"data:application/pdf;base64,{pdf_base64}"
+def split_pdf(input_pdf, pages_per_chunk, output_dir):
+    """
+    Découpe un PDF en sous-PDFs de N pages
+    """
+    doc = fitz.open(input_pdf)
+    chunks = []
 
-# --- OCR DU DOCUMENT ---
-ocr_response = client.ocr.process(
-    model="mistral-ocr-latest",
-    document={
-        "type": "document_url",
-        "document_url": document_url,
-        "document_name": pdf_path
-    },
-    include_image_base64=False
-)
+    for i in range(0, len(doc), pages_per_chunk):
+        chunk_path = os.path.join(output_dir, f"chunk_{i//pages_per_chunk}.pdf")
+        new_doc = fitz.open()
 
-# --- CORRECTION PAGE PAR PAGE ---
-corrected_pages = []
+        for page_index in range(i, min(i + pages_per_chunk, len(doc))):
+            new_doc.insert_pdf(doc, from_page=page_index, to_page=page_index)
 
-for i, page in enumerate(ocr_response.pages):
-    raw_md = page.markdown
+        new_doc.save(chunk_path)
+        chunks.append(chunk_path)
 
-    # Prompt pour correction
-    prompt = (
-    "corrige le texte extrait d’un scan OCR. sans mettre des commentaires que le contenu: \n"
-    + raw_md
-)
+    return chunks
 
 
-    response = client.chat.complete(
-        model="mistral-large-latest",
-        messages=[{"role": "user", "content": prompt}],
+def pdf_to_base64(pdf_path):
+    with open(pdf_path, "rb") as f:
+        return base64.b64encode(f.read()).decode("utf-8")
+
+
+def ocr_and_correct_pdf(pdf_path):
+    """
+    OCR + correction du PDF (chunk)
+    Retourne une liste de pages Markdown corrigées
+    """
+    pdf_base64 = pdf_to_base64(pdf_path)
+    document_url = f"data:application/pdf;base64,{pdf_base64}"
+
+    # --- OCR ---
+    ocr_response = client.ocr.process(
+        model="mistral-ocr-latest",
+        document={
+            "type": "document_url",
+            "document_url": document_url,
+            "document_name": os.path.basename(pdf_path),
+        },
     )
 
-    # Récupération du texte corrigé
-    corrected_md = response.choices[0].message.content
-    corrected_pages.append(corrected_md)
+    corrected_pages = []
 
-    print(f" Page {i+1} corrigée")
+    # --- CORRECTION PAGE PAR PAGE ---
+    for page_index, page in enumerate(ocr_response.pages):
+        prompt = (
+            "Corrige le texte extrait d’un scan OCR. "
+            "Ne fais aucun commentaire, conserve uniquement le contenu. "
+            "Respecte le Markdown.\n\n"
+            + page.markdown
+        )
 
-# --- FUSION ET SAUVEGARDE ---
-full_md = "\n\n".join(corrected_pages)
+        response = client.chat.complete(
+            model="mistral-large-latest",
+            messages=[{"role": "user", "content": prompt}],
+            temperature=0,
+        )
 
-with open(output_md, "w", encoding="utf-8") as f:
-    f.write(full_md)
+        corrected_pages.append(response.choices[0].message.content)
 
-print(f"\n🎉 OCR + correction terminés ! Markdown corrigé enregistré dans {output_md}")
+    return corrected_pages
 
+# ---------------- PIPELINE PRINCIPAL ----------------
+
+def process_pdf(input_pdf, output_md, pages_per_chunk):
+    all_pages_md = []
+
+    with TemporaryDirectory() as tmpdir:
+        chunks = split_pdf(input_pdf, pages_per_chunk, tmpdir)
+
+        for chunk_index, chunk_pdf in enumerate(chunks):
+            print(f"📄 Traitement du chunk {chunk_index + 1}/{len(chunks)}")
+
+            pages_md = ocr_and_correct_pdf(chunk_pdf)
+
+            for i, page_md in enumerate(pages_md):
+                global_page_number = chunk_index * pages_per_chunk + i + 1
+                all_pages_md.append(f"## Page {global_page_number}\n\n{page_md}")
+
+    # --- SAUVEGARDE FINALE ---
+    with open(output_md, "w", encoding="utf-8") as f:
+        f.write("\n\n".join(all_pages_md))
+
+    print(f"\n🎉 Markdown final généré : {output_md}")
+
+# ---------------- RUN ----------------
+
+if __name__ == "__main__":
+    if not API_KEY:
+        raise RuntimeError("❌ MISTRAL_API_KEY manquante")
+
+    process_pdf(INPUT_PDF, OUTPUT_MD, PAGES_PER_CHUNK)
