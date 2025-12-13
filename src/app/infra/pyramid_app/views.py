@@ -1,82 +1,145 @@
+
 import os
 from pyramid.view import view_config
-
-# Import du service Git depuis Domain (DDD)
+from pyramid.response import Response
 from domain.services.git_services import GitService
 
+import mimetypes
 
-# ---------------------------------------------------------------------
-# CONFIGURATION DU RÉPERTOIRE GIT
-# ---------------------------------------------------------------------
-# Sous Docker, ce répertoire doit être monté comme volume :
-# docker-compose :   ./git_data:/app/git_data
-# Dockerfile :        WORKDIR /app
+
+# 🔹 PATH du dépôt Git (créé dans Docker)
 repo_path = os.getenv("PYRAMID_REPO_PATH", "/app/git_data")
 
-# On s’assure que le répertoire existe
-os.makedirs(repo_path, exist_ok=True)
-
-# Instanciation du service Git
+# 🔹 Instance Git
 git_service = GitService(repo_path)
 
 
-
-# ---------------------------------------------------------------------
-# ⬤ PAGE D'ACCUEIL
-# ---------------------------------------------------------------------
+# -----------------------------
+# PAGE D'ACCUEIL
+# -----------------------------
 @view_config(route_name="home", renderer="templates/home.pt")
 def home(request):
-    """Page d'accueil de la bibliothèque numérique."""
     return {
         "title": "Bienvenue dans Biblioteko",
-        "message": "Bibliothèque numérique avec Pyramid + TAL/METAL",
-        "features": [
-            "Upload de documents",
-            "Modération",
-            "Gestion Git",
-            "Architecture DDD",
-            "Compatibilité Docker"
-        ]
+        "message": "Bibliothèque numérique décentralisée",
+        "features": ["Upload", "Modération", "Git", "TAL/METAL"]
     }
 
-# ---------------------------------------------------------------------
 
-@view_config(route_name="creation_de_compte", renderer="templates/creation_de_compte.pt")
-def create_user_view(request):
-    if request.method == "POST":
-        prenom = request.POST['prenom']
-        nom = request.POST['nom']
-        email = request.POST['email']
-        git_service.create_user(prenom, nom, email)
-        return {"message": f"Utilisateur {prenom} {nom} créé avec succès"}
-    return {}
-
-# Upload d'un fichier
+# -----------------------------
+# UPLOAD UTILISATEUR
+# -----------------------------
 @view_config(route_name="upload", renderer="templates/upload.pt")
-def upload_view(request):
+def upload(request):
+    message = "Choisissez un fichier à envoyer"
+
     if request.method == "POST":
-        username = request.POST.get('username')  # à adapter selon session
-        file_storage = request.POST['file'].file
-        filename = request.POST['file'].filename
-        git_service.upload_user_file(username, filename, file_storage.read())
-        return {"message": f"Fichier {filename} envoyé en modération"}
-    return {}
+        uploaded_file = request.POST.get("file")
+        if uploaded_file is None:
+            message = "Aucun fichier reçu."
+        else:
+            filename = uploaded_file.filename
+            file_bytes = uploaded_file.file.read()
+            # Ajout dans Git → a_moderer/
+            git_service.add_file_for_moderation(filename, file_bytes)
+            message = f"Fichier {filename} ajouté pour modération."
 
-# Page modération
+    return {"title": "Uploader", "message": message}
+
+
+
+
+
+# -----------------------------
+# PAGE DE MODÉRATION
+# -----------------------------
 @view_config(route_name="moderation", renderer="templates/moderation.pt")
-def moderation_view(request):
+def moderation(request):
+    """
+    Page pour modérer les fichiers proposés par les utilisateurs.
+    Affiche la liste des fichiers en attente de validation et un message optionnel.
+    """
     files = git_service.list_moderation_files()
-    return {"moderation_files": files}
 
-# Actions sur la modération
-@view_config(route_name="moderation_action", request_method="POST")
-def moderation_action(request):
-    filename = request.POST['filename']
-    action = request.POST['action']
-    commentaire = request.POST.get('commentaire', "")
-    if action == "valider":
-        git_service.approve(filename)
-    elif action == "refuser":
-        git_service.reject(filename, commentaire)
-    # consulter → à implémenter selon UI
-    return {"moderation_files": git_service.list_moderation_files()}
+    # Si aucun fichier à modérer, on peut afficher un message
+    if not files:
+        message = "Aucun fichier à modérer pour l'instant."
+    else:
+        message = None  # Pas de message si des fichiers existent
+
+    return {
+        "title": "Modération des documents",
+        "files": files,
+        "message": message
+    }
+
+
+
+# -----------------------------
+# CONSULTER UN DOCUMENT
+# -----------------------------
+@view_config(route_name="moderation_view")
+def moderation_view(request):
+    filename = request.matchdict["filename"]
+    path = os.path.join(repo_path, "a_moderer", filename)
+
+    if not os.path.exists(path):
+        return Response("Fichier introuvable.", status=404)
+
+    return Response(
+        content_type="application/pdf",
+        body=open(path, "rb").read()
+    )
+
+
+# -----------------------------
+# APPROUVER
+# -----------------------------
+@view_config(route_name="moderation_approve")
+def moderation_approve(request):
+    filename = request.matchdict["filename"]
+    git_service.approve_file(filename)
+    return Response(f"{filename} approuvé et déplacé dans fond_commun.")
+
+
+# -----------------------------
+# REFUSER
+# -----------------------------
+@view_config(route_name="moderation_reject")
+def moderation_reject(request):
+    filename = request.matchdict["filename"]
+    git_service.reject_file(filename)
+    return Response(f"{filename} rejeté et supprimé.")
+
+@view_config(route_name="fond_commun", renderer="templates/fond_commun.pt")
+def fond_commun(request):
+    files = git_service.list_fond_commun_files()
+    return {
+        "title": "Fond Commun",
+        "files": files
+    }
+
+@view_config(route_name="fond_commun", renderer="templates/fond_commun.pt")
+def fond_commun(request):
+    files = git_service.list_fond_commun_files()  # Méthode à créer pour lister les fichiers
+    return {
+        "title": "Fond Commun",
+        "files": files,
+        "message": None  # ou un message type "Aucun fichier" si nécessaire
+    }
+
+
+
+@view_config(route_name="fond_commun_download")
+def fond_commun_download(request):
+    filename = request.matchdict["filename"]
+    path = os.path.join(git_service.repo_path, "fond_commun", filename)
+
+    if not os.path.exists(path):
+        return Response("Fichier introuvable.", status=404)
+
+    mime_type, _ = mimetypes.guess_type(path)
+    return Response(
+        content_type=mime_type or "application/octet-stream",
+        body=open(path, "rb").read()
+    )

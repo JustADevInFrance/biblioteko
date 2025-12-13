@@ -1,38 +1,29 @@
 <html xmlns:tal="http://xml.zope.org/namespaces/tal">
-  <head>
-    <title tal:content="title">Modération des documents</title>
-    <style>
-      body { font-family: Arial, sans-serif; padding: 20px; }
-      table { width: 100%; border-collapse: collapse; }
-      th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
-      button { padding: 5px 10px; margin-right: 5px; }
-      .approve { background-color: #28a745; color: white; border: none; cursor: pointer; }
-      .reject { background-color: #dc3545; color: white; border: none; cursor: pointer; }
-      .consult { background-color: #007bff; color: white; border: none; cursor: pointer; }
-    </style>
-  </head>
-  <body>
-    <h1 tal:content="title">Modération des documents</h1>
+<head>
+    <title tal:content="title">Modération</title>
+</head>
+<body>
 
-    <table>
-      <tr>
-        <th>Fichier</th>
-        <th>Actions</th>
-      </tr>
-      <tal:block repeat="fichier view/moderation_files">
-        <tr>
-          <td tal:content="structure/fichier">Nom du fichier</td>
-          <td>
-            <form tal:attributes="action request.path; method 'post'">
-              <input type="hidden" name="filename" tal:attributes="value structure/fichier"/>
-              <button type="submit" name="action" value="consulter" class="consult">Consulter</button>
-              <button type="submit" name="action" value="valider" class="approve">Valider</button>
-              <button type="submit" name="action" value="refuser" class="reject">Refuser</button>
-              <input type="text" name="commentaire" placeholder="Commentaire (optionnel)" />
-            </form>
-          </td>
-        </tr>
-      </tal:block>
-    </table>
-  </body>
+<h1 tal:content="title">Modération des documents</h1>
+
+<p tal:condition="message" tal:content="message">Message</p>
+
+<ul>
+  <li tal:repeat="file files">
+      <span tal:content="file">Nom du fichier</span>
+
+      <!-- Bouton consulter -->
+      <a tal:attributes="href string:/moderation/view/${file}">Consulter</a>
+
+      <!-- Bouton approuver -->
+      <a tal:attributes="href string:/moderation/approve/${file}">Approuver</a>
+
+      <!-- Bouton refuser -->
+      <a tal:attributes="href string:/moderation/reject/${file}">Refuser</a>
+  </li>
+</ul>
+
+<a href="/">Retour</a>
+
+</body>
 </html>

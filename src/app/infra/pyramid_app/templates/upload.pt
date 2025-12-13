@@ -1,26 +1,11 @@
 <html xmlns:tal="http://xml.zope.org/namespaces/tal">
-  <head>
-    <title tal:content="title">Uploader un fichier</title>
-    <style>
-      body { font-family: Arial, sans-serif; padding: 20px; }
-      .container { max-width: 600px; margin: auto; }
-      input[type=file] { display: block; margin-bottom: 10px; }
-      button { padding: 8px 16px; background-color: #007BFF; color: white; border: none; cursor: pointer; }
-      button:hover { background-color: #0056b3; }
-      .message { margin-top: 20px; padding: 10px; background-color: #e9ecef; border-radius: 5px; }
-    </style>
-  </head>
+  <head><title tal:content="title">Uploader</title></head>
   <body>
-    <div class="container">
-      <h1 tal:content="title">Uploader un fichier</h1>
-      <form tal:attributes="action request.path; method 'post'; enctype 'multipart/form-data'">
-        <label for="file">Choisissez un fichier :</label>
-        <input type="file" id="file" name="file" required />
-        <button type="submit">Envoyer</button>
-      </form>
-
-      <div class="message" tal:content="message">Message par défaut</div>
-    </div>
+    <h1 tal:content="title">Uploader un document</h1>
+    <p tal:content="message">Message par défaut</p>
+    <form method="POST" enctype="multipart/form-data">
+      <input type="file" name="file"/>
+      <button type="submit">Envoyer</button>
+    </form>
   </body>
 </html>
-

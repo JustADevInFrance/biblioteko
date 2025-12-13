@@ -1,0 +1,23 @@
+<html xmlns:tal="http://xml.zope.org/namespaces/tal">
+<head>
+    <title tal:content="title">Fond Commun</title>
+</head>
+<body>
+
+<h1 tal:content="title">Œuvres du fond commun</h1>
+
+<p tal:condition="message" tal:content="message">Message</p>
+
+<ul>
+  <li tal:repeat="file files">
+      <span tal:content="file">Nom du fichier</span>
+
+      <!-- Bouton télécharger -->
+      <a tal:attributes="href string:/fond_commun/download/${file}">Télécharger</a>
+  </li>
+</ul>
+
+<a href="/">Retour</a>
+
+</body>
+</html>
