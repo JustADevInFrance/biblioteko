@@ -5,9 +5,8 @@ zope.component
 zope.deprecation
 GitPython
 waitress
-
-# --- AJOUTS ---
 mistralai>=0.5.0
 PyMuPDF>=1.23.0
-python-dotenv    # optionnel mais recommandé
+python-dotenv    
 
+markdown

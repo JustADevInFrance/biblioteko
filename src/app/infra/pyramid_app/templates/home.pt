@@ -1,13 +1,26 @@
 <html xmlns:tal="http://xml.zope.org/namespaces/tal">
   <head>
-    <title tal:content="title">Titre par défaut</title>
+    <title tal:content="title">Titre</title>
+    <link rel="stylesheet" href="/static/style.css" />
   </head>
+
   <body>
-    <h1 tal:content="title">Titre par défaut</h1>
-    <p tal:content="message">Message par défaut</p>
-    <h3>Fonctionnalités :</h3>
-    <ul>
-      <li tal:repeat="feat features" tal:content="feat">Feature</li>
-    </ul>
+    <div class="container">
+      <h1 tal:content="title">Titre</h1>
+      <p tal:content="message">Message</p>
+
+      <h3>Fonctionnalités</h3>
+
+      <ul class="features">
+        <li tal:repeat="feat features">
+          <a
+            tal:attributes="href request.route_url(feat['route'])"
+            tal:content="feat['name']"
+          >
+            Feature
+          </a>
+        </li>
+      </ul>
+    </div>
   </body>
 </html>

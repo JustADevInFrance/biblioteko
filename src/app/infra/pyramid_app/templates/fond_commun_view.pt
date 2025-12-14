@@ -1,0 +1,14 @@
+<html xmlns:tal="http://xml.zope.org/namespaces/tal">
+<head>
+    <title tal:content="title"></title>
+    <link rel="stylesheet" href="/static/style.css"/>
+</head>
+<body>
+<div class="container">
+    <h1 tal:content="title"></h1>
+    <div class="md-content" tal:content="structure content"></div>
+    <a href="#" class="back-link" onclick="history.back(); return false;">← Retour</a>
+
+</div>
+</body>
+</html>

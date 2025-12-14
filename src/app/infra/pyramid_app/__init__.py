@@ -12,6 +12,9 @@ def create_app():
     # Scanner les vues décorées
     config.scan('infra.pyramid_app.views')
 
+    config.add_static_view(name="static",path="infra.pyramid_app:static")
+
+
     # Support TAL/METAL
     config.include('pyramid_chameleon')
 

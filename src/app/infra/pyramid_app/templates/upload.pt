@@ -1,11 +1,23 @@
 <html xmlns:tal="http://xml.zope.org/namespaces/tal">
-  <head><title tal:content="title">Uploader</title></head>
-  <body>
+<head>
+    <title tal:content="title">Uploader</title>
+    <link rel="stylesheet" href="/static/style.css"/>
+</head>
+<body>
+
+<div class="container">
     <h1 tal:content="title">Uploader un document</h1>
-    <p tal:content="message">Message par défaut</p>
+
+    <p class="message" tal:content="message">Message par défaut</p>
+
     <form method="POST" enctype="multipart/form-data">
-      <input type="file" name="file"/>
-      <button type="submit">Envoyer</button>
+        <input type="file" name="file" required/>
+        <br><br>
+        <button class="btn-approve" type="submit">Envoyer</button>
     </form>
-  </body>
+
+    <a class="back-link" href="/">← Retour à l’accueil</a>
+</div>
+
+</body>
 </html>

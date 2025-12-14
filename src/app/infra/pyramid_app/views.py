@@ -1,7 +1,9 @@
 
 import os
+import markdown
 from pyramid.view import view_config
 from pyramid.response import Response
+from pyramid.httpexceptions import HTTPFound
 from domain.services.git_services import GitService
 from domain.services.pdf_to_md import pdf_to_markdown
 
@@ -20,11 +22,19 @@ git_service = GitService(repo_path)
 # -----------------------------
 @view_config(route_name="home", renderer="templates/home.pt")
 def home(request):
+    features = [
+        {"name": "Upload", "route": "upload"},
+        {"name": "Modération", "route": "moderation"},
+        {"name": "Fond commun", "route": "fond_commun"},
+    ]
+
     return {
         "title": "Bienvenue dans Biblioteko",
         "message": "Bibliothèque numérique décentralisée",
-        "features": ["Upload", "Modération", "Git", "TAL/METAL"]
+        "features": features,
+        "request": request,  # important pour route_url
     }
+
 
 
 @view_config(route_name="upload", renderer="templates/upload.pt")
@@ -96,7 +106,9 @@ def moderation(request):
 # -----------------------------
 # CONSULTER UN DOCUMENT
 # -----------------------------
-@view_config(route_name="moderation_view")
+
+
+@view_config(route_name="moderation_view",renderer="templates/fond_commun_view.pt")
 def moderation_view(request):
     filename = request.matchdict["filename"]
     path = os.path.join(repo_path, "a_moderer", filename)
@@ -104,10 +116,27 @@ def moderation_view(request):
     if not os.path.exists(path):
         return Response("Fichier introuvable.", status=404)
 
-    return Response(
-        content_type="application/pdf",
-        body=open(path, "rb").read()
-    )
+    ext = os.path.splitext(filename)[1].lower()
+
+    if ext == ".pdf":
+        return Response(
+            content_type="application/pdf",
+            body=open(path, "rb").read()
+        )
+
+    if ext == ".md":
+        with open(path, "r", encoding="utf-8") as f:
+            md_text = f.read()
+
+        html = markdown.markdown(md_text)
+
+        return {
+            "title": filename,
+            "content": html
+        }
+
+    return Response("Format non supporté", status=400)
+
 
 
 # -----------------------------
@@ -117,13 +146,8 @@ def moderation_view(request):
 def moderation_approve(request):
     filename = request.matchdict["filename"]
     git_service.approve_file(filename)
-    return Response(f"{filename} approuvé et déplacé dans fond_commun.")
+    return HTTPFound(location=request.route_url("moderation"))
 
-
-    # -----------------------------
-    # AUTRE FORMAT → REFUS
-    # -----------------------------
-    return Response("Format de fichier non supporté", status=400)
 
 
 # -----------------------------
@@ -133,15 +157,11 @@ def moderation_approve(request):
 def moderation_reject(request):
     filename = request.matchdict["filename"]
     git_service.reject_file(filename)
-    return Response(f"{filename} rejeté et supprimé.")
+    return HTTPFound(location=request.route_url("moderation"))
 
-@view_config(route_name="fond_commun", renderer="templates/fond_commun.pt")
-def fond_commun(request):
-    files = git_service.list_fond_commun_files()
-    return {
-        "title": "Fond Commun",
-        "files": files
-    }
+# -----------------------------
+# PAGE FOND COMMUN
+# -----------------------------
 
 @view_config(route_name="fond_commun", renderer="templates/fond_commun.pt")
 def fond_commun(request):
@@ -167,3 +187,32 @@ def fond_commun_download(request):
         content_type=mime_type or "application/octet-stream",
         body=open(path, "rb").read()
     )
+
+
+@view_config(route_name="fond_commun_view", renderer="templates/fond_commun_view.pt")
+def fond_commun_view(request):
+    """Afficher un fichier du fond commun, Markdown en HTML si possible."""
+    filename = request.matchdict["filename"]
+    path = os.path.join(git_service.repo_path, "fond_commun", filename)
+
+    if not os.path.exists(path):
+        return Response("Fichier introuvable.", status=404)
+
+    ext = os.path.splitext(filename)[1].lower()
+
+    if ext == ".md":
+        with open(path, "r", encoding="utf-8") as f:
+            md_content = f.read()
+        html_content = markdown.markdown(md_content)
+        return {
+            "title": filename,
+            "content": html_content
+        }
+    else:
+        # Pour PDF ou autres → téléchargement direct
+        mime_type, _ = mimetypes.guess_type(path)
+        return Response(
+            content_type=mime_type or "application/octet-stream",
+            body=open(path, "rb").read(),
+            content_disposition=f'attachment; filename="{escape(filename)}"'
+        )

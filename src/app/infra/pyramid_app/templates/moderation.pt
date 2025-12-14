@@ -1,29 +1,39 @@
 <html xmlns:tal="http://xml.zope.org/namespaces/tal">
 <head>
     <title tal:content="title">Modération</title>
+    <link rel="stylesheet" href="/static/style.css"/>
 </head>
 <body>
 
-<h1 tal:content="title">Modération des documents</h1>
+<div class="container">
+    <h1 tal:content="title">Modération des documents</h1>
 
-<p tal:condition="message" tal:content="message">Message</p>
+    <p class="message" tal:condition="message" tal:content="message">Message</p>
 
-<ul>
-  <li tal:repeat="file files">
-      <span tal:content="file">Nom du fichier</span>
+    <ul class="file-list">
+        <li tal:repeat="file files">
+            <span class="file-name" tal:content="file">Nom du fichier</span>
+            <div class="actions">
+                <a class="btn-view"
+                   tal:attributes="href string:/moderation/view/${file}">
+                   Consulter
+                </a>
 
-      <!-- Bouton consulter -->
-      <a tal:attributes="href string:/moderation/view/${file}">Consulter</a>
+                <a class="btn-approve"
+                   tal:attributes="href string:/moderation/approve/${file}">
+                   Approuver
+                </a>
 
-      <!-- Bouton approuver -->
-      <a tal:attributes="href string:/moderation/approve/${file}">Approuver</a>
+                <a class="btn-reject"
+                   tal:attributes="href string:/moderation/reject/${file}">
+                   Refuser
+                </a>
+            </div>
+        </li>
+    </ul>
 
-      <!-- Bouton refuser -->
-      <a tal:attributes="href string:/moderation/reject/${file}">Refuser</a>
-  </li>
-</ul>
-
-<a href="/">Retour</a>
+    <a class="back-link" href="/">← Retour à l’accueil</a>
+</div>
 
 </body>
 </html>

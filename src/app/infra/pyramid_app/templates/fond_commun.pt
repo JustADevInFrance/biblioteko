@@ -1,23 +1,31 @@
 <html xmlns:tal="http://xml.zope.org/namespaces/tal">
 <head>
     <title tal:content="title">Fond Commun</title>
+    <link rel="stylesheet" href="/static/style.css"/>
 </head>
 <body>
 
-<h1 tal:content="title">Œuvres du fond commun</h1>
+<div class="container">
+    <h1 tal:content="title">Œuvres du fond commun</h1>
 
-<p tal:condition="message" tal:content="message">Message</p>
+    <p class="message" tal:condition="message" tal:content="message">Message</p>
 
-<ul>
-  <li tal:repeat="file files">
-      <span tal:content="file">Nom du fichier</span>
+    <ul class="file-list">
+        <li tal:repeat="file files">
+            <span class="file-name" tal:content="file">Nom du fichier</span>
+            <div class="actions">
+                <a class="btn-download"
+                   tal:attributes="href string:/fond_commun/download/${file}">
+                   Télécharger
+                </a >
+                <a class="btn-view" 
+                tal:attributes="href string:/fond_commun/view/${file}">Consulter</a>
+            </div>
+        </li>
+    </ul>
 
-      <!-- Bouton télécharger -->
-      <a tal:attributes="href string:/fond_commun/download/${file}">Télécharger</a>
-  </li>
-</ul>
-
-<a href="/">Retour</a>
+    <a class="back-link" href="/">← Retour à l’accueil</a>
+</div>
 
 </body>
 </html>
