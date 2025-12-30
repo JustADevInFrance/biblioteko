@@ -1,0 +1,8 @@
+
+<div metal:use-macro="base.pt/layout"
+     xmlns:metal="http://xml.zope.org/namespaces/metal">
+  <div metal:fill-slot="content">
+      <h1>Bienvenue</h1>
+      <p>Starter Pyramid + Bootstrap opérationnel.</p>
+  </div>
+</div>

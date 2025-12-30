@@ -1,0 +1,7 @@
+<div class="container mt-4">
+  <h2 tal:content="proposition.titre">Titre</h2>
+  <p><strong>Auteur:</strong> <span tal:content="proposition.auteur"></span></p>
+  <div class="markdown-preview" tal:replace="structure proposition.contenu_markdown"></div>
+  <a class="btn btn-secondary" tal:attributes="href python:request.route_url('annuler_proposition', id=proposition.id)">Annuler</a>
+  <a class="btn btn-success" tal:attributes="href python:request.route_url('envoyer_proposition', id=proposition.id)">Envoyer aux bibliothécaires</a>
+</div>

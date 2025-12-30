@@ -45,24 +45,44 @@
 
 ### 13/10/25
 
+---
+
 1. Rédaction de quelques scénarios et modification du scénario d'emprunt avec les réflxions vues précédemment.
 
 2. Modification du script d'export en markdown (non fonctionnel pour l'instant).
 
 3. Passage et présentation du glossaire métier et de la liste de scénarios.
 
+---
+
 ### 20/10/25 
+
+---
 
 1. Réflexion sur les problèmes de sécurité liés aux oeuvres sous droits d'auteur. Dès qu'une oeuvre sous droits est passée sur le site (ou sur l'application), des données sont stockées et trouvables, même avec la mise en place d'une gestion d'oeuvres empruntables ou non. Ces données posent alors un problème de sécurité au niveau de l'application.
 
 2. Réalisation de quelques diagrammes de classes pour certains scénarios.
 
+---
+
 ### 03/11/25
+
+---
 
 1. Mise en commun des idées concernant la gestion des oeuvres sous droits d'auteurs et accessoirement sur les emprunts. L'idée donnée la plus praticable serait une modération humaine (vérification humaine) quant au stockage des oeuvres sous droits. L'idée de notre groupe $-$ refuser les oeuvres sous droits et stocker leurs métadonnées dans une blacklist $-$ n'est probablement pas applicable car certaines oeuvres n'ont pas d'informations trouvables permettant de poruver les droits d'auteur.
 
 2. Rédaction de nouveaux diagrammes de classes pour d'autre scénarios.
 
+---
+
 ### 10/11/25
 
 1. Ecriture de plusieurs diagrammes d'états transitions à partir des diagrammes de classes
+
+---
+
+### 01/12/25
+
+1. Choix d'utilisation de Pyramid avec TAL/METAL pour le backend de l'application car demandé par le client dans le cahier des charges.
+
+2. Pour l'instant le choix du framework frontend se tourne vers Bootstrap car plus rapide au vu du temps limité.
