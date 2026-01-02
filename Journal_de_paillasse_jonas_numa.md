@@ -188,3 +188,83 @@ Il permet :
 - Une documentation cohérente et versionnée avec le reste du projet.
 - Une meilleure compréhension globale du système sans dépendre d’outils externes.
 
+
+
+# Rapport d'avancement du projet – Gestion des ouvrages
+
+---
+
+# Rapport d'avancement du projet – Gestion des ouvrages
+
+---
+
+### 1 Janvier 2026
+Suite à ma précédente analyse du projet sur la gestion des ouvrages avec Git, j’ai eu une discussion avec mon collègue pour décider entre continuer à utiliser Git pour stocker les données ou passer à une base de données qu’il avait déjà commencée.  
+
+L’utilisation de Git présentait plusieurs inconvénients :  
+1. Capacité limitée pour gérer de gros volumes de données.  
+2. Accès aux données plus compliqué comparé à une base de données.  
+
+La décision finale a été de privilégier l’usage d’une base de données.  
+
+J’ai repris son code et tout changé dans ma branche. Le code n’était pas terminé et manquait d’ergonomie, j’ai donc dû **refactorer plusieurs parties** pour améliorer la lisibilité et l’organisation du projet.
+
+#### Pages et vues principales
+- **Page d’accueil (`home`)** : affichage du contenu principal et de la barre de navigation.  
+- **Liste des œuvres (`oeuvres`)** : récupération de toutes les œuvres depuis la base et affichage.  
+- **Connexion et inscription (`connect`)** :  
+  - Connexion avec vérification du mot de passe et gestion de session.  
+  - Inscription avec création d’un nouvel utilisateur et gestion des doublons.  
+- **Déconnexion (`logout`)** : suppression complète de la session et redirection vers l’accueil.  
+- **Upload d’œuvres (`upload`)** : gestion de l’upload de fichiers, création d’une proposition, et gestion des erreurs.  
+- **Aperçu des propositions (`apercu_prop`)** :  
+  - Affichage de la proposition, actions pour annuler ou envoyer.  
+  - Conversion du Markdown en HTML pour l’affichage.  
+- **Aperçu des œuvres (`apercu_oeuvre`)** : affichage du contenu Markdown transformé en HTML.  
+
+---
+
+### 2 Janvier 2026
+Aujourd’hui, j’ai travaillé sur plusieurs fonctionnalités et améliorations :  
+
+#### Gestion des rôles et administration
+- Ajout d’un **admin par défaut** pour traiter les demandes de rôles.  
+- Gestion des demandes de rôle par les utilisateurs avec vérification qu’une demande n’est pas déjà en cours.  
+- Gestion côté admin pour **refuser ou consulter les demandes**.  
+
+#### Tests et stabilité
+- Ajout de **tests unitaires initiaux** pour certaines fonctionnalités critiques.  
+- Gestion des erreurs liées aux uploads et aux formulaires pour éviter les plantages.  
+
+#### Environnement et lancement
+- Mise en place d’un **venv** depuis la racine du projet.  
+- Installation des dépendances via `requirements.txt`.  
+- Lancement du serveur avec `pserve`.  
+- Automatisation via le script `lancement.sh` qui :  
+  - Crée et active le venv.  
+  - Installe les dépendances.  
+  - Installe le package en mode édition.  
+  - Démarre le serveur pour tests en local.  
+
+Ces améliorations permettent désormais de naviguer sur l’application, proposer et visualiser des œuvres, gérer les utilisateurs et les rôles, tout en gardant le projet stable et fonctionnel.
+
+
+#### 1. Choix de SQLAlchemy
+
+Pour la gestion des données, nous avons choisi **SQLAlchemy** comme ORM (Object Relational Mapper) pour plusieurs raisons :  
+
+1. **Abstraction de la base de données** : SQLAlchemy permet de manipuler les données sous forme d’objets Python (`Oeuvre`, `Proposition`, `Utilisateurs`) plutôt que d’écrire directement des requêtes SQL. Cela rend le code plus lisible et maintenable.  
+2. **Gestion des sessions** : l’utilisation de `Session()` permet de contrôler précisément les transactions et de fermer automatiquement les connexions après usage, ce qui réduit les risques de fuites ou de conflits.  
+3. **Portabilité** : SQLAlchemy fonctionne avec différentes bases de données (SQLite, PostgreSQL, MySQL), ce qui permet de changer de moteur si nécessaire.  
+4. **Intégration facile avec Pyramid** : les sessions SQLAlchemy s’intègrent facilement dans les vues Pyramid, comme on le voit dans nos vues `apercu_oeuvre_view`, `gestion_biblio_view` ou `demande_role_view`.
+
+
+---
+
+### Lancement du programme
+Pour lancer le programme :  
+1. Se placer à la **racine du projet**.  
+2. Lancer le script `lancement.sh` :  
+
+```bash
+./lancement.sh
