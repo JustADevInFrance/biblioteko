@@ -1,0 +1,5 @@
+pytest                   # Framework de tests
+pytest-cov               # Couverture de tests (optionnel)
+WebTest                  # Simuler des requêtes HTTP pour Pyramid
+
+-r requirements.txt  
