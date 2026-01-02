@@ -3,7 +3,7 @@ import tempfile
 import logging
 
 from ..models import Proposition
-
+from ..ai_utils import *
 
 logger = logging.getLogger(__name__)
 

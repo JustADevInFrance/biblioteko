@@ -21,3 +21,22 @@ def markdown_to_html(md_text):
             "smarty"
         ]
     ))
+
+def apercu_prop_content(prop, html_content):
+    return f"""
+    <div class="container mt-4">
+      <h2>{prop.titre}</h2>
+      <p><strong>Auteur:</strong> {prop.auteur}</p>
+      <p><strong>Format:</strong> {prop.format_oeuvre}</p>
+      <hr/>
+      <div class="markdown-preview">
+        {html_content}  <!-- HTML sûr -->
+      </div>
+      <div class="mt-3">
+        <form method="post">
+          <button class="btn btn-secondary" name="action" value="annuler">Annuler</button>
+          <button class="btn btn-success" name="action" value="envoyer">Envoyer aux bibliothécaires</button>
+        </form>
+      </div>
+    </div>
+    """

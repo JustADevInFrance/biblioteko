@@ -28,7 +28,14 @@ HEADERS = {
     "Content-Type": "application/json"
 }
 
-POPPLER_PATH = r"C:\popper\Library\bin"
+import os
+
+# Si Windows, utiliser le chemin Windows, sinon Linux
+if os.name == "nt":  # Windows
+    POPPLER_PATH = r"C:\popper\Library\bin"
+else: 
+    POPPLER_PATH = "/usr/bin"
+
 
 logging.basicConfig(
     level=logging.INFO,
