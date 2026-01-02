@@ -93,6 +93,35 @@ class DemandeRole(Base):
     utilisateur = relationship("Utilisateurs")
 
 
+def create_admin_if_not_exists():
+    session = Session()
+    from datetime import datetime
+
+    ADMIN_USERNAME = "admin"
+    ADMIN_EMAIL = "jonuma2100@gmail.com"
+    ADMIN_PASSWORD = "admin"  # tu peux le changer après la première connexion
+
+    existing_admin = session.query(Utilisateurs).filter_by(username=ADMIN_USERNAME).first()
+
+    if not existing_admin:
+        admin_user = Utilisateurs(
+            username=ADMIN_USERNAME,
+            email=ADMIN_EMAIL,
+            role="admin",
+            is_active=True,
+            date_creation=datetime.utcnow()
+        )
+        admin_user.set_password(ADMIN_PASSWORD)
+        session.add(admin_user)
+        try:
+            session.commit()
+            print(f"[INFO] Admin '{ADMIN_USERNAME}' créé avec succès !")
+        except Exception as e:
+            session.rollback()
+            print(f"[ERROR] Impossible de créer l'admin : {e}")
+    session.close()
+
+
 # Création de la base SQLite
 engine = create_engine('sqlite:///bibliotheque.db', echo=True)
 Base.metadata.create_all(engine)

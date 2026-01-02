@@ -1,5 +1,6 @@
 from pyramid.config import Configurator
 from pyramid.session import SignedCookieSessionFactory
+from .models import create_admin_if_not_exists
 
 def main(global_config, **settings):
     """Fonction principale qui renvoie l'application WSGI Pyramid."""
@@ -7,6 +8,8 @@ def main(global_config, **settings):
     
     # Activer Chameleon pour les templates .pt
     config.include('pyramid_chameleon')
+
+    create_admin_if_not_exists()
     
     # Définir les routes
     config.add_route('home', '/')

@@ -5,11 +5,19 @@ from sqlalchemy.exc import IntegrityError
 import tempfile
 import os
 from sqlalchemy import func
+from sqlalchemy.orm import joinedload
 
 from .helpers import *
 from .templates_fragments import *
 from ..services.upload_service import *
 
+def demande_en_cours(session, user_id):
+    """Retourne True si l'utilisateur a déjà une demande en attente"""
+    existante = session.query(DemandeRole).filter_by(
+        utilisateur_id=user_id,
+        statut="en_attente"
+    ).first()
+    return bool(existante)
 
 # --- Page d'accueil ---
 @view_config(route_name='home', renderer='app:templates/base.pt')
@@ -169,9 +177,6 @@ def apercu_prop_view(request):
 
 @view_config(route_name="apercu_oeuvre", renderer="app:templates/base.pt")
 def apercu_oeuvre_view(request):
-    from ..services.markdown_service import markdown_to_html
-    from ..templates_fragments import apercu_oeuvre_content
-    from ..views.helpers import build_navbar
 
     session = Session()
     oeuvre = session.get(Oeuvre, request.matchdict.get("id"))
@@ -192,10 +197,6 @@ def apercu_oeuvre_view(request):
 
 @view_config(route_name="gestion_biblio", renderer="app:templates/base.pt")
 def gestion_biblio_view(request):
-    from ..services.bibliothecaire_service import traiter_proposition
-    from ..templates_fragments import gestion_biblio_content
-    from ..views.helpers import build_navbar
-
     session = Session()
 
     if request.method == "POST":
@@ -221,12 +222,6 @@ def gestion_biblio_view(request):
 
 @view_config(route_name="demande_role",renderer="app:templates/base.pt",request_method=["GET", "POST"])
 def demande_role_view(request):
-    from ..services.demande_role_service import (
-        demande_en_cours,
-        creer_demande
-    )
-    from ..templates_fragments import demande_role_content
-    from ..views.helpers import build_navbar
 
     if not request.session.get("username"):
         return HTTPFound(location="/connect")
@@ -242,8 +237,11 @@ def demande_role_view(request):
         if demande_en_cours(session, user.id):
             message = "Une demande est déjà en cours."
         else:
-            creer_demande(session, user.id)
+            demande = DemandeRole(utilisateur_id=user.id)
+            session.add(demande)
+            session.commit()
             message = "Demande envoyée avec succès."
+
 
     session.close()
 
@@ -275,16 +273,12 @@ def admin_refuser(request):
 
 @view_config(route_name="admin_demandes", renderer="app:templates/base.pt")
 def admin_demandes_view(request):
-    from ..templates_fragments import admin_demandes_content
-    from ..views.helpers import build_navbar
-
+    
     if request.session.get("role") != "admin":
         return HTTPFound(location="/")
 
     session = Session()
-    demandes = session.query(DemandeRole)\
-        .filter_by(statut="en_attente")\
-        .all()
+    demandes = session.query(DemandeRole).options(joinedload(DemandeRole.utilisateur)).filter_by(statut="en_attente").all()
     session.close()
 
     return {
@@ -309,3 +303,4 @@ def admin_accepter(request):
 
     session.close()
     return HTTPFound(location="/admin/demandes")
+

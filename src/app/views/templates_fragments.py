@@ -9,21 +9,6 @@ def home_content():
     </div>
     """
 
-def build_navbar(request):
-    links = [
-        ("Accueil", "/"),
-        ("Oeuvres", "/oeuvres")
-    ]
-    if request.session.get("username"):
-        links.append(("Proposer une oeuvre", "/upload"))
-        links.append(("Demande de rôle", "/demande-role"))
-        if request.session.get("role") == "bibliothecaire":
-            links.append(("Gestion bibliothécaire", "/gestion_biblio"))
-        links.append(("Se déconnecter", "/logout"))
-    else:
-        links.append(("Se connecter", "/connect"))
-    return links
-
 
 def oeuvres_content(oeuvres, request):
     html = "<h2>Liste des Oeuvres</h2><ul class='list-group'>"
