@@ -11,6 +11,7 @@ from .helpers import *
 from .templates_fragments import *
 from ..services.upload_service import *
 from ..services.markdown_service import *
+from ..services.traiter_proposition import *
 
 def demande_en_cours(session, user_id):
     """Retourne True si l'utilisateur a déjà une demande en attente"""
