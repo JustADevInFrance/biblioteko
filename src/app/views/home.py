@@ -4,6 +4,7 @@ from pyramid.httpexceptions import HTTPFound
 from sqlalchemy.exc import IntegrityError
 import tempfile
 import os
+from sqlalchemy import func
 
 from .helpers import *
 from .templates_fragments import *
@@ -39,20 +40,63 @@ def connect_view(request):
     session = Session()
     message = ""
 
-    # LOGIQUE AUTH → IDENTIQUE À TON CODE
-    # (je n’y touche PAS)
+    # --- LOGIQUE POST ---
+    if request.method == "POST":
+        # --- Connexion ---
+        if "username" in request.params:
+            username = request.params.get("username")
+            password = request.params.get("password")[:72]  # limitation bcrypt
+            user = session.query(Utilisateurs)\
+                .filter(func.lower(Utilisateurs.username) == username.lower())\
+                .first()
 
+            if user and user.check_password(password):
+                request.session["user_id"] = user.id
+                request.session["username"] = user.username
+                request.session["role"] = user.role
+                session.close()
+                return HTTPFound(location=request.route_url('home'))
+            else:
+                message = "Nom d'utilisateur ou mot de passe incorrect"
+                form_type = "connexion"
+
+        # --- Inscription ---
+        elif "new_username" in request.params:
+            username = request.params.get("new_username")
+            email = request.params.get("new_email")
+            password = request.params.get("new_password")[:72]
+
+            new_user = Utilisateurs(
+                username=username,
+                email=email,
+                role="membre"
+            )
+            new_user.set_password(password)
+
+            session.add(new_user)
+            try:
+                session.commit()
+                session.close()
+                return HTTPFound(location=request.route_url("connect", _query={"form":"connexion"}))
+            except IntegrityError:
+                session.rollback()
+                message = "Nom d'utilisateur ou email déjà utilisé"
+                form_type = "inscription"
+
+    # --- BUILD MAIN CONTENT ---
     main_content = (
         connexion_form(message)
         if form_type == "connexion"
         else inscription_form(message)
     )
 
+    session.close()
     return {
         "title": "Connexion",
         "navbar_links": build_navbar(request),
         "main_content": main_content,
     }
+
 
     
 @view_config(route_name='logout')
