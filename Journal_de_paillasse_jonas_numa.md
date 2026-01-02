@@ -248,6 +248,17 @@ Aujourd’hui, j’ai travaillé sur plusieurs fonctionnalités et amélioration
 
 Ces améliorations permettent désormais de naviguer sur l’application, proposer et visualiser des œuvres, gérer les utilisateurs et les rôles, tout en gardant le projet stable et fonctionnel.
 
+
+#### 1. Choix de SQLAlchemy
+
+Pour la gestion des données, nous avons choisi **SQLAlchemy** comme ORM (Object Relational Mapper) pour plusieurs raisons :  
+
+1. **Abstraction de la base de données** : SQLAlchemy permet de manipuler les données sous forme d’objets Python (`Oeuvre`, `Proposition`, `Utilisateurs`) plutôt que d’écrire directement des requêtes SQL. Cela rend le code plus lisible et maintenable.  
+2. **Gestion des sessions** : l’utilisation de `Session()` permet de contrôler précisément les transactions et de fermer automatiquement les connexions après usage, ce qui réduit les risques de fuites ou de conflits.  
+3. **Portabilité** : SQLAlchemy fonctionne avec différentes bases de données (SQLite, PostgreSQL, MySQL), ce qui permet de changer de moteur si nécessaire.  
+4. **Intégration facile avec Pyramid** : les sessions SQLAlchemy s’intègrent facilement dans les vues Pyramid, comme on le voit dans nos vues `apercu_oeuvre_view`, `gestion_biblio_view` ou `demande_role_view`.
+
+
 ---
 
 ### Lancement du programme
