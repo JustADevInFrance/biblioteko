@@ -1,0 +1,62 @@
+# ===============================
+# Framework web
+# ===============================
+pyramid>=2.0,<3.0
+waitress>=2.1,<4.0
+
+# Templates TAL
+zope.tal
+zope.pagetemplate
+
+# ===============================
+# HTTP & APIs
+# ===============================
+requests
+PyYAML
+
+# ===============================
+# Markdown rendering
+# ===============================
+markdown
+markupsafe
+
+# ===============================
+# Images & OCR pipeline
+# ===============================
+Pillow>=10.0
+pdf2image
+pytesseract
+
+# ===============================
+# PDF processing
+# ===============================
+PyMuPDF          # alternative / utilitaire PDF
+reportlab       # si génération de PDF plus tard
+
+# ===============================
+# Utilities
+# ===============================
+python-dotenv
+tqdm
+loguru
+
+# ===============================
+# Database (SQLAlchemy)
+# ===============================
+SQLAlchemy>=2.0
+alembic
+
+# ===============================
+# File uploads & forms
+# ===============================
+python-multipart
+
+# ===============================
+# Security / sessions
+# ===============================
+passlib[bcrypt]
+bcrypt<4.0.0
+# ===============================
+# Development & debugging
+# ===============================
+ipython

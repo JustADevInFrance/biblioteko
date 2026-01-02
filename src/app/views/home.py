@@ -1,0 +1,267 @@
+from pyramid.view import view_config
+from ..models import Session, Oeuvre, Utilisateurs, Proposition, DemandeRole
+from pyramid.httpexceptions import HTTPFound
+from sqlalchemy.exc import IntegrityError
+import tempfile
+import os
+
+from .helpers import *
+from .templates_fragments import *
+from ..services.upload_service import *
+
+
+# --- Page d'accueil ---
+@view_config(route_name='home', renderer='app:templates/base.pt')
+def home_view(request):
+    return {
+        "title": "Accueil",
+        "navbar_links": build_navbar(request),
+        "main_content": home_content(),
+    }
+
+
+@view_config(route_name='oeuvres', renderer='app:templates/base.pt')
+def oeuvres_view(request):
+    session = Session()
+    oeuvres = session.query(Oeuvre).all()
+    session.close()
+
+    return {
+        "title": "Oeuvres",
+        "navbar_links": build_navbar(request),
+        "main_content": oeuvres_content(oeuvres, request),
+    }
+
+
+@view_config(route_name='connect', renderer='app:templates/base.pt')
+def connect_view(request):
+    form_type = request.params.get('form', 'connexion')
+    session = Session()
+    message = ""
+
+    # LOGIQUE AUTH → IDENTIQUE À TON CODE
+    # (je n’y touche PAS)
+
+    main_content = (
+        connexion_form(message)
+        if form_type == "connexion"
+        else inscription_form(message)
+    )
+
+    return {
+        "title": "Connexion",
+        "navbar_links": build_navbar(request),
+        "main_content": main_content,
+    }
+
+    
+@view_config(route_name='logout')
+def logout_view(request):
+    # Supprime toutes les données de session
+    request.session.invalidate()
+    # Redirige vers la page d'accueil
+    return HTTPFound(location=request.route_url('home'))
+
+
+@view_config(route_name='upload', renderer='app:templates/base.pt')
+def upload_view(request):
+
+    session = Session()
+    message = ""
+
+    if request.method == "POST":
+        try:
+            prop = handle_upload(
+                request.params.get("fichier"),
+                request.session.get("user_id"),
+                session
+            )
+            return HTTPFound(
+                location=request.route_url("apercu_prop", id=prop.id)
+            )
+        except Exception as e:
+            message = str(e)
+
+    return {
+        "title": "Proposer une oeuvre",
+        "navbar_links": build_navbar(request),
+        "main_content": upload_form(message),
+    }
+
+
+@view_config(route_name='apercu_prop', renderer='app:templates/base.pt')
+def apercu_prop_view(request):
+
+    session = Session()
+    prop = session.get(Proposition, request.matchdict.get("id"))
+
+    if not prop:
+        session.close()
+        return HTTPFound(location=request.route_url("home"))
+
+    action = request.params.get("action")
+    if action == "annuler":
+        session.delete(prop)
+        session.commit()
+        session.close()
+        return HTTPFound(location=request.route_url("home"))
+
+    if action == "envoyer":
+        prop.est_valide = True
+        session.commit()
+        session.close()
+        return HTTPFound(location=request.route_url("home"))
+
+    markdown_clean = clean_markdown(prop.contenu_markdown)
+    html_content = markdown_to_html(markdown_clean)
+    session.close()
+
+    return {
+        "title": "Aperçu Proposition",
+        "navbar_links": build_navbar(request),
+        "main_content": apercu_prop_content(prop, html_content),
+    }
+
+
+@view_config(route_name="apercu_oeuvre", renderer="app:templates/base.pt")
+def apercu_oeuvre_view(request):
+    from ..services.markdown_service import markdown_to_html
+    from ..templates_fragments import apercu_oeuvre_content
+    from ..views.helpers import build_navbar
+
+    session = Session()
+    oeuvre = session.get(Oeuvre, request.matchdict.get("id"))
+    session.close()
+
+    if not oeuvre:
+        return HTTPFound(location=request.route_url("oeuvres"))
+
+    html_content = markdown_to_html(oeuvre.contenu_markdown)
+
+    return {
+        "title": "Aperçu Oeuvre",
+        "navbar_links": build_navbar(request),
+        "main_content": apercu_oeuvre_content(oeuvre, html_content),
+    }
+
+
+
+@view_config(route_name="gestion_biblio", renderer="app:templates/base.pt")
+def gestion_biblio_view(request):
+    from ..services.bibliothecaire_service import traiter_proposition
+    from ..templates_fragments import gestion_biblio_content
+    from ..views.helpers import build_navbar
+
+    session = Session()
+
+    if request.method == "POST":
+        prop_id = request.POST.get("prop_id")
+        action = request.POST.get("action")
+
+        proposition = session.get(Proposition, prop_id)
+        if proposition:
+            traiter_proposition(session, proposition, action)
+
+        session.close()
+        return HTTPFound(location=request.route_url("gestion_biblio"))
+
+    propositions = session.query(Proposition).all()
+    session.close()
+
+    return {
+        "title": "Gestion Bibliothécaire",
+        "navbar_links": build_navbar(request),
+        "main_content": gestion_biblio_content(propositions, request),
+    }
+
+
+@view_config(route_name="demande_role",renderer="app:templates/base.pt",request_method=["GET", "POST"])
+def demande_role_view(request):
+    from ..services.demande_role_service import (
+        demande_en_cours,
+        creer_demande
+    )
+    from ..templates_fragments import demande_role_content
+    from ..views.helpers import build_navbar
+
+    if not request.session.get("username"):
+        return HTTPFound(location="/connect")
+
+    session = Session()
+    user = session.query(Utilisateurs).filter_by(
+        username=request.session["username"]
+    ).first()
+
+    message = ""
+
+    if request.method == "POST":
+        if demande_en_cours(session, user.id):
+            message = "Une demande est déjà en cours."
+        else:
+            creer_demande(session, user.id)
+            message = "Demande envoyée avec succès."
+
+    session.close()
+
+    return {
+        "title": "Demande de rôle",
+        "navbar_links": build_navbar(request),
+        "main_content": demande_role_content(message),
+    }
+
+
+@view_config(route_name="admin_refuser")
+def admin_refuser(request):
+    if request.session.get("role") != "admin":
+        return HTTPFound(location="/")
+
+    session = Session()
+    demande = session.get(DemandeRole, request.matchdict["id"])
+
+    if demande:
+        demande.statut = "refuse"
+        demande.date_traitement = datetime.utcnow()
+        # facultatif : stocker un motif
+        demande.motif_refus = "Rejeté par l'administrateur"
+        session.commit()
+
+    session.close()
+    return HTTPFound(location="/admin/demandes")
+
+
+@view_config(route_name="admin_demandes", renderer="app:templates/base.pt")
+def admin_demandes_view(request):
+    from ..templates_fragments import admin_demandes_content
+    from ..views.helpers import build_navbar
+
+    if request.session.get("role") != "admin":
+        return HTTPFound(location="/")
+
+    session = Session()
+    demandes = session.query(DemandeRole)\
+        .filter_by(statut="en_attente")\
+        .all()
+    session.close()
+
+    return {
+        "title": "Administration",
+        "navbar_links": build_navbar(request),
+        "main_content": admin_demandes_content(demandes, request),
+    }
+
+
+@view_config(route_name="admin_accepter")
+def admin_accepter(request):
+    from ..services.demande_role_service import accepter_demande
+
+    if request.session.get("role") != "admin":
+        return HTTPFound(location="/")
+
+    session = Session()
+    demande = session.get(DemandeRole, request.matchdict["id"])
+
+    if demande:
+        accepter_demande(session, demande)
+
+    session.close()
+    return HTTPFound(location="/admin/demandes")
