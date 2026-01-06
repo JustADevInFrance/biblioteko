@@ -13,7 +13,8 @@ from PIL import Image
 # CONFIG
 # =========================================================
 
-dotenv_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), ".env")
+dotenv_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), "..", ".env")
+dotenv_path = os.path.abspath(dotenv_path)
 load_dotenv(dotenv_path)
 
 PIXTRAL_API_KEY = os.getenv("PIXTRAL_API_KEY")
