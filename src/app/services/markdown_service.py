@@ -1,6 +1,20 @@
 import markdown
 from markupsafe import Markup
 
+import re
+
+def clean_llm_markdown(md_text: str) -> str:
+    """
+    Enlève les blocs ```markdown ...``` renvoyés par le LLM.
+    """
+    if not md_text:
+        return ""
+    # Supprime ```markdown …```
+    cleaned = re.sub(r"```markdown\s*\n(.*?)```", r"\1", md_text, flags=re.DOTALL)
+    # Supprime ``` tout court si reste
+    cleaned = re.sub(r"```(.*?)```", r"\1", cleaned, flags=re.DOTALL)
+    return cleaned.strip()
+
 
 def clean_markdown(md_text):
     lines = (md_text or "").splitlines()
@@ -11,8 +25,8 @@ def clean_markdown(md_text):
 
 
 def markdown_to_html(md_text):
-    return Markup(markdown.markdown(
-        md_text,
+    html = markdown.markdown(
+        md_text or "",
         extensions=[
             "extra",
             "fenced_code",
@@ -20,9 +34,12 @@ def markdown_to_html(md_text):
             "sane_lists",
             "smarty"
         ]
-    ))
+    )
+    return Markup(html)
 
 def apercu_prop_content(prop, html_content):
+    html_content = markdown_to_html(prop.contenu_markdown)
+
     return f"""
     <div class="container mt-4">
       <h2>{prop.titre}</h2>

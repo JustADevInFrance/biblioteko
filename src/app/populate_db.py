@@ -10,11 +10,12 @@ if user_to_delete:
     print("Utilisateur précédent supprimé")
 
 # Création du nouvel utilisateur
-utilisateur = Utilisateurs()
-utilisateur.username = "Tom"
-utilisateur.email = "tom.mequinion@hotmail.com"
+utilisateur = Utilisateurs(
+    username = "Tom",
+    email = "tom.mequinion@hotmail.com",
+    role = "bibliothecaire"
+)
 utilisateur.set_password("testB")
-utilisateur.role = "bibliothecaire"
 
 session.add(utilisateur) 
 session.commit()

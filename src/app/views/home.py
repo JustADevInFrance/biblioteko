@@ -165,15 +165,21 @@ def apercu_prop_view(request):
         session.commit()
         session.close()
         return HTTPFound(location=request.route_url("home"))
-
-    markdown_clean = clean_markdown(prop.contenu_markdown)
+    
+    print(prop.contenu_markdown)
+    
+    markdown = clean_llm_markdown(prop.contenu_markdown)
+    markdown_clean = clean_markdown(markdown)
     html_content = markdown_to_html(markdown_clean)
     session.close()
 
+    print(type(html_content))
+
+    main_content = apercu_prop_content(prop, html_content)
     return {
         "title": "Aperçu Proposition",
         "navbar_links": build_navbar(request),
-        "main_content": apercu_prop_content(prop, html_content),
+        "main_content": main_content,
     }
 
 

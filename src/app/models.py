@@ -69,14 +69,16 @@ class Oeuvre(Base):
 
     utilisateur = relationship("Utilisateurs")
 
-    def __init__(self, titre, auteur, format_oeuvre, contenu_markdown, est_explicite=False, libre_de_droit=True):
+    def __init__(self, titre, auteur, format_oeuvre, contenu_markdown, annee=None, est_explicite=False, libre_de_droit=True, utilisateur_id=None, date_creation=None,):
         self.titre = titre
         self.auteur = auteur
         self.format_oeuvre = format_oeuvre
         self.contenu_markdown = contenu_markdown
+        self.annee = annee
         self.est_explicite = est_explicite
         self.libre_de_droit = libre_de_droit
-        self.date_creation = datetime.utcnow()
+        self.utilisateur_id = utilisateur_id
+        self.date_creation = date_creation or datetime.utcnow()
 
 
 # -------------------------

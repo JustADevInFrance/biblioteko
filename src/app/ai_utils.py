@@ -66,7 +66,7 @@ def analyze_with_pixtral_from_image(image: Image.Image) -> str:
     image_b64 = base64.b64encode(buffer.getvalue()).decode("utf-8")
 
     payload = {
-        "model": "pixtral-12b",
+        "model": "mistral-small-latest",
         "messages": [
             {
                 "role": "user",
@@ -144,7 +144,8 @@ def pdf_scanned_to_markdown(pdf_path: str) -> str:
 
 def refine_markdown(md_text: str) -> str:
     prompt = (
-        "Voici un texte en Markdown extrait d'un livre scientifique.\n"
+        "Tu es un assistant qui renvoie STRICTEMENT du code Markdown.\n"
+        "Ne rajoute aucun commentaire, aucune note, aucun texte explicatif.\n"
         "Corrige les répétitions, les titres multiples, "
         "réécris les paragraphes mal formés, "
         "mais conserve toutes les informations et images.\n"

@@ -43,11 +43,11 @@ def handle_upload(fichier, user_id, session):
             auteur=meta_info.get("auteur", "Inconnu"),
             format_oeuvre="pdf" if filename.endswith(".pdf") else "md",
             contenu_markdown=contenu_markdown,
-            meta_info=str(meta_info),
-            utilisateur_id=user_id,
             est_explicite=est_explicite,
             libre_de_droit=libre_de_droit
         )
+        prop.meta_info = str(meta_info)
+        prop.utilisateur_id = user_id
 
         session.add(prop)
         session.commit()
